@@ -189,7 +189,7 @@ func (m *manager) GetValidatorSet(
 	validatorSetsCache := m.getValidatorSetCache(subnetID)
 
 	if validatorSet, ok := validatorSetsCache.Get(targetHeight); ok {
-		m.log.Info(fmt.Sprint("FELIPE CACHE", len(validatorSet)))
+		m.log.Info(fmt.Sprint("FELIPE CACHE ", len(validatorSet), " ", targetHeight, " ", subnetID))
 		m.metrics.IncValidatorSetsCached()
 		return validatorSet, nil
 	}
@@ -295,9 +295,9 @@ func (m *manager) makeSubnetValidatorSet(
 	if err != nil {
 		return nil, 0, err
 	}
-	m.log.Info(fmt.Sprint("FELIPENEW", subnetID, len(subnetValidatorSet), len(primaryValidatorSet), currentHeight))
+	m.log.Info(fmt.Sprint("FELIPE STEP2 ", subnetID, " ", len(subnetValidatorSet), "  ", len(primaryValidatorSet), "  ", currentHeight))
 	if currentHeight < targetHeight {
-		m.log.Info(fmt.Sprint("FELIPENEW ME FUI"))
+		m.log.Info(fmt.Sprint("FELIPE ME FUI ", currentHeight, " ", targetHeight))
 		return nil, 0, database.ErrNotFound
 	}
 
@@ -318,7 +318,7 @@ func (m *manager) makeSubnetValidatorSet(
 	if err != nil {
 		return nil, 0, err
 	}
-	m.log.Info(fmt.Sprint("FELIPENEW 2", len(subnetValidatorSet)))
+	m.log.Info(fmt.Sprint("FELIPE STEP2 ", len(subnetValidatorSet)))
 
 	// Update the subnet validator set to include the public keys at
 	// [currentHeight]. When we apply the public key diffs, we will convert
@@ -339,7 +339,7 @@ func (m *manager) makeSubnetValidatorSet(
 		currentHeight,
 		lastDiffHeight,
 	)
-	m.log.Info(fmt.Sprintf("FELIPENEW 3", len(subnetValidatorSet)))
+	m.log.Info(fmt.Sprint("FELIPE STEP3 ", len(subnetValidatorSet)))
 	return subnetValidatorSet, currentHeight, err
 }
 

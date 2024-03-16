@@ -52,11 +52,14 @@ func GetCanonicalValidatorSet(
 	pChainHeight uint64,
 	subnetID ids.ID,
 ) ([]*Validator, uint64, error) {
+	fmt.Println("FELIPE GetCanonicalValidatorSet")
+	fmt.Println("FELIPE pChainHeight", pChainHeight, subnetID)
 	// Get the validator set at the given height.
 	vdrSet, err := pChainState.GetValidatorSet(ctx, pChainHeight, subnetID)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to fetch validator set (P-Chain Height: %d, SubnetID: %s): %w", pChainHeight, subnetID, err)
 	}
+	fmt.Println("FELIPE len(vdrSet)", len(vdrSet))
 
 	var (
 		vdrs        = make(map[string]*Validator, len(vdrSet))
@@ -65,10 +68,12 @@ func GetCanonicalValidatorSet(
 	for _, vdr := range vdrSet {
 		totalWeight, err = math.Add64(totalWeight, vdr.Weight)
 		if err != nil {
+			fmt.Println("FELIPE ERROR")
 			return nil, 0, fmt.Errorf("%w: %w", ErrWeightOverflow, err)
 		}
 
 		if vdr.PublicKey == nil {
+			fmt.Println("FELIPE vdr.PublicKey == nil")
 			continue
 		}
 
@@ -89,6 +94,7 @@ func GetCanonicalValidatorSet(
 	// Sort validators by public key
 	vdrList := maps.Values(vdrs)
 	utils.Sort(vdrList)
+	fmt.Println("FELIPE len(vdrList)", len(vdrList))
 	return vdrList, totalWeight, nil
 }
 
